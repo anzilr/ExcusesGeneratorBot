@@ -11,7 +11,7 @@ async def index(req: Request):
     msg = await req.json()
 
     chat_id, text = await MessageParser(msg)
-    #print(text)
+    # print(text)
     try:
         if text == "/start":
             await SendMessage(chat_id, text=START_TEXT)
@@ -27,3 +27,7 @@ async def index(req: Request):
     except:
         pass
 
+
+@app.get("/")
+async def index_get():
+    return "Nothing here!"

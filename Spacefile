@@ -4,10 +4,9 @@ micros:
   - name: ExcusesGeneratorBot
     src: ./
     engine: python3.9
+    public_routes:
+      - "*"
     primary: true
-    commands:
-      - pip install -r requirements.txt
-    run: uvicorn main:app
     presets:
       env:
         - name: BOT_TOKEN
