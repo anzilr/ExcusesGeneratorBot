@@ -23,6 +23,7 @@ headers = {
 
 
 async def Generator(messup, professionalism, target):
+    # Setting the payload with prompts
     professionalism = int(professionalism)
     payload = json.dumps({
         "0": {
