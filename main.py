@@ -1,15 +1,14 @@
 from fastapi import FastAPI, Request
-from message_handler import MessageParser, conversation
+from utils.parser import MessageParser
 
 
 app = FastAPI()
 
 
 @app.post('/')
-async def index(req: Request):
-    msg = await req.json()
-    chat_id, text = await MessageParser(msg)
-    await conversation(chat_id, text)
+async def index(request: Request):
+    update = await request.json()
+    await MessageParser(update)
 
 
 @app.get("/")
