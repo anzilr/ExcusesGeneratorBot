@@ -1,9 +1,9 @@
-import aiohttp
 from pydantic import BaseModel
-from typing import List
 import traceback
-from api import Generator
-from config import BOT_TOKEN, START_TEXT
+from utils.inlinekeyboard import InlineKeyboardMarkup
+from utils.sender import SendMessage
+from utils.api import Generator
+from config import START_TEXT
 
 
 # Creating conversation data model
@@ -29,17 +29,24 @@ CONV_CMD = ["/excuse", "/excuses"]
 
 
 async def conversation(chat_id, text):
-
     try:
         # Getting the current state of the conversation
         state = conversation_data.get(chat_id, ConversationData(state=STATE_START)).state
 
         if text in CMD:
-            await SendMessage(chat_id, text=START_TEXT)
+            reply_markup = await InlineKeyboardMarkup(buttons=[
+                [
+                    {'text': '🗃️ Source', 'url': 'https://github.com/anzilr/ExcusesGeneratorBot'},
+                    {'text': '↩️ Share Me', 'url': 't.me/share/url?url=Hi! I am 🤖 @ExcuseGenBot. I can give you 🧠 AI generated excuses for your mess-ups 😜.'}
+                ]
+            ])
+
+            await SendMessage(chat_id, START_TEXT, reply_markup)
 
         elif text in CONV_CMD:
             # Starting the conversation by asking the reason
-            await SendMessage(chat_id, text="Give me a reason to generate an excuse.\n\nExample: <i>Missed the boys night</i>")
+            await SendMessage(chat_id,
+                              text="Give me a reason to generate an excuse.\n\nExample: <i>Missed the boys night</i>")
             # Storing the current state
             conversation_data[chat_id] = ConversationData(state=STATE_MESSUP)
 
@@ -63,7 +70,12 @@ async def conversation(chat_id, text):
             response = await Generator(
                 conversation_data[chat_id].messup, conversation_data[chat_id].professionalism,
                 conversation_data[chat_id].target)
-            await SendMessage(chat_id, response)
+            reply_markup = await InlineKeyboardMarkup(buttons=[
+                [
+                    {'text': '🔄 Regenerate', 'callback_data': f'{conversation_data[chat_id].messup}|{conversation_data[chat_id].professionalism}|{conversation_data[chat_id].target}'}
+                ]
+            ])
+            await SendMessage(chat_id, response, reply_markup)
             del conversation_data[chat_id]
 
         else:
@@ -73,19 +85,3 @@ async def conversation(chat_id, text):
         print(traceback.format_exc())
 
 
-async def SendMessage(chat_id, text):
-    url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
-    payload = {
-        'chat_id': chat_id,
-        'text': text,
-        'parse_mode': 'HTML'
-    }
-    async with aiohttp.ClientSession() as session:
-        response = await session.post(url, json=payload)
-    return response
-
-
-async def MessageParser(message):
-    chat_id = message['message']['chat']['id']
-    text = message['message']['text']
-    return chat_id, text
