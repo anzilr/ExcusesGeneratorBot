@@ -54,13 +54,13 @@ async def conversation(chat_id, text):
             # Storing the reason and asking for the professionalism
             conversation_data[chat_id].messup = text
             await SendMessage(chat_id,
-                              text="Ok. Now tell me how much professional the excuse should be. Pass a value between 1 - 100\n\nExample: <i>20</i>")
+                              text="Ok. Now tell me how professional the excuse should be. Pass a value between 1 - 100\n\nExample: <i>20</i>")
             conversation_data[chat_id].state = STATE_PROFESSIONALISM
 
         elif state == STATE_PROFESSIONALISM:
             # Storing the professionalism and asking for the target
             conversation_data[chat_id].professionalism = int(text)
-            await SendMessage(chat_id, text="Name the person you make the excuse.\n\nExample: <i>Friend</i>")
+            await SendMessage(chat_id, text="Who are you making the excuse to?\n\nExample: <i>Friend</i>")
             conversation_data[chat_id].state = STATE_TARGET
 
         elif state == STATE_TARGET:
