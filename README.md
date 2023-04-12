@@ -9,7 +9,7 @@ You can use this bot to generate excuses. It uses a reverse engineered api from 
 
 ## Why FastAPI?
 
-Because, FastAPI is the fastest micro framework for python. Faster than Flask, and Asynchronous.
+Because, FastAPI is the fastest micro framework for python. Faster than Flask, and it is Asynchronous.
 
 ## Deployment
 
@@ -40,7 +40,7 @@ Don't forget to clear the token when you are committing the file to git.
 ```
 uvicorn main:app --reload
 ```
-This will restart the server automatically when you make changes to the code.
+This will restart the server automatically whenever you make changes to the code.
 
 ### Deploy to Deta Space
 
@@ -87,3 +87,8 @@ https://api.telegram.org/bot<BOT_TOKEN>/setWebhook?url=<APP_LINK>
 
 - If you make any changes in the code, just run `space push` command. It will update the bot and restart.
 
+### Deploy to Vercel
+
+Click the button below to start deploying to vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fanzilr%2FExcusesGeneratorBot&env=BOT_TOKEN&envDescription=Get%20your%20bot%20token%20from%20BotFather&project-name=excuuses-generator-bot&repository-name=excuuses-generator-bot)
