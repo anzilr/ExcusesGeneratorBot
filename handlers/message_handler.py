@@ -59,9 +59,12 @@ async def conversation(chat_id, text):
 
         elif state == STATE_PROFESSIONALISM:
             # Storing the professionalism and asking for the target
-            conversation_data[chat_id].professionalism = int(text)
-            await SendMessage(chat_id, text="Who are you making the excuse to?\n\nExample: <i>Friend</i>")
-            conversation_data[chat_id].state = STATE_TARGET
+            if text.isdigit():
+                conversation_data[chat_id].professionalism = int(text)
+                await SendMessage(chat_id, text="Who are you making the excuse to?\n\nExample: <i>Friend</i>")
+                conversation_data[chat_id].state = STATE_TARGET
+            else:
+                await SendMessage(chat_id, text="Send a number between 1 - 100")
 
         elif state == STATE_TARGET:
             # Storing the target and generating response
